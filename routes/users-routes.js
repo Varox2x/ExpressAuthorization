@@ -1,10 +1,11 @@
 import express from 'express';
 import pool from '../db.js';
 import bcrypt from 'bcrypt';
+import { authenticateToken } from '../middlewear/authorization.js';
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/',authenticateToken, async (req, res) => {
     try {
         const users = await pool.query('SELECT * FROM users');
         res.json({users : users.rows});
@@ -21,7 +22,7 @@ router.post('/', async (req, res) => {
              [req.body.name, req.body.email, hashedPassword]);
              res.json({users: newUser.rows[0]});
     } catch (error) {
-
+            res.status(500).json({error: error.message})
     }
 })
 
