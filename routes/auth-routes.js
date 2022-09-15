@@ -42,4 +42,13 @@ router.get('/refresh_token', (req, res) => {
 })
 
 
+router.delete('/refresh_token', (req, res) => {
+    try {
+        res.clearCookie('refresh_token');
+        return res.status(200).json({message:'refresh token deleted.'})
+    } catch (error){
+        res.status(401)
+    }
+})
+
 export default router;
